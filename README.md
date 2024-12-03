@@ -32,32 +32,32 @@
 
 ### Create a new metric:
 - POST /api/v1/metrics
-    - - Request Body:
-        - - - description
-        - - - query
-    - - Response:
-        - - - metricId
-        - - - description
-        - - - query
+    - Request Body:
+        - description
+        - query
+    - Response:
+        - metricId
+        - description
+        - query
 
 ### Update a metric:
 - PUT /api/v1/metrics/{metricId}
-    - - Request Body:
-        - - - description (optional)
-        - - - query (optional)
-    - - Response:
-        - - - metricId
-        - - - description
-        - - - query
+    - Request Body:
+        - description (optional)
+        - query (optional)
+    - Response:
+        - metricId
+        - description
+        - query
 
 ### Delete a metric:
 - DELETE /api/v1/metrics/{metricId}
 
 ### Execute a query:
 - POST /api/v1/metrics/{metricId}
-    - - Request Body:
-        - - - // Parameters for the query
-    - - Response:
-        - - - result
+    - Request Body:
+        - // Parameters for the query
+    - Response:
+        - result
 
 
