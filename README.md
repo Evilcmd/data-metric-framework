@@ -4,8 +4,10 @@
 ## DataBase Schema:
 
 ### Restaraunt:
-- RestarauntId: BIGINT
-- RestarauntName: TEXT
+```
+RestarauntId: BIGINT
+RestarauntName: TEXT
+```
 
 ### Food:
 - FoodId: BIGINT
