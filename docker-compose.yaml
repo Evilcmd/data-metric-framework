@@ -1,0 +1,40 @@
+version: '2'
+
+services:
+  postgresql-primary:
+    image: 'docker.io/bitnami/postgresql:15'
+    container_name: 'postgresql-master'
+    ports:
+      - '5434:5432'
+    volumes:
+      - 'postgresql_primary_data:/bitnami/postgresql'
+    environment:
+      - POSTGRESQL_PGAUDIT_LOG=READ,WRITE
+      - POSTGRESQL_LOG_HOSTNAME=true
+      - POSTGRESQL_REPLICATION_MODE=master
+      - POSTGRESQL_REPLICATION_USER=repl_user
+      - POSTGRESQL_REPLICATION_PASSWORD=repl_password
+      - POSTGRESQL_DATABASE=food_delivery
+      - POSTGRESQL_USERNAME=postgres
+      - POSTGRESQL_PASSWORD=my_password
+  postgresql-replica:
+    image: 'docker.io/bitnami/postgresql:15'
+    container_name: 'postgresql-follower'
+    ports:
+      - '5435:5432'
+    depends_on:
+      - postgresql-primary
+    environment:
+      - POSTGRESQL_USERNAME=postgres
+      - POSTGRESQL_PASSWORD=my_password
+      - POSTGRESQL_MASTER_HOST=postgresql-primary
+      - POSTGRESQL_PGAUDIT_LOG=READ,WRITE
+      - POSTGRESQL_LOG_HOSTNAME=true
+      - POSTGRESQL_REPLICATION_MODE=slave
+      - POSTGRESQL_REPLICATION_USER=repl_user
+      - POSTGRESQL_REPLICATION_PASSWORD=repl_password
+      - POSTGRESQL_MASTER_PORT_NUMBER=5432
+
+volumes:
+  postgresql_primary_data:
+    driver: local

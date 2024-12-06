@@ -1,40 +1,73 @@
 # This is an application to monitor data metrics
 
 
-## DataBase Schema:
+## Food Delivery DataBase:
 
-### Restaraunt:
+### Schema:
+
 ```
-RestarauntId: BIGINT
-RestarauntName: TEXT
+restaraunts:
+    RestarauntId: BIGINT
+    RestarauntName: TEXT
+
+foods:
+    FoodId: BIGINT
+    FoodName: TEXT
+    RestarauntId: BIGINT
+
+orders: (Partitioned based on city)
+    OrderId: BIGINT
+    RestarauntId: BIGINT
+    UserId: BIGINT
+    City: TEXT
+    OrdereTime: TIMESTAMP
+    Cost: INT
+
+ordered_foods: (Partitioned based on city)
+    OrderedFoodId: BIGINT
+    FoodId: BIGINT
+    OrderId: BIGINT
+    City: TEXT
+
+users:
+    UserId: BIGINT
+    UserName: TEXT
 ```
 
-### Food:
+### Indexes:
 ```
-FoodId: BIGINT
-FoodName: TEXT
-RestarauntId: BIGINT
+foods:
+    FoodName
+    RestarauntId
+
+orders:
+    RestarauntId
+    City
+    OrderTime
+
+ordered_foods:
+    FoodId
+    OrderId
+    City
 ```
 
-### Order:
-```
-OrderId: BIGINT
-RestarauntId: BIGINT
-UserId: BIGINT
-Address: TEXT
-```
 
-### OrderedFood:
-```
-OrderedFoodId: BIGINT
-FoodId: BIGINT
-OrderId: BIGINT
-```
+## Metrics DataBase:
 
-### User:
+### Schema:
+
 ```
-UserId: BIGINT
-UserName: TEXT
+queries:
+    QueryId: INT
+    QueryDescription: TEXT
+    Query: TEXT
+
+query_parameters:
+    ParameterId: INT
+    QueryId: INT
+    ParameterName: TEXT
+    ParameterType: TEXT
+    Order: INT
 ```
 
 
@@ -46,13 +79,46 @@ POST /api/v1/metrics
     Request Body:
         description
         query
+        queryParameters
     Response:
         metricId
         description
         query
 ```
 
-### Update a metric:
+### Fetch all metrics:
+```
+GET /api/v1/metrics
+    Request Body:
+    Response:
+        metricId
+        description
+        query
+        parameters
+```
+
+### Fetch metric:
+```
+GET /api/v1/metrics/{metricId}
+    Request Body:
+    Response:
+        metricId
+        description
+        query
+        parameters
+```
+
+### Execute a query:
+```
+POST /api/v1/metrics/{metricId}
+    Request Body:
+        // Parameters for the metric
+    Response:
+        result
+```
+
+
+<!-- ### Update a metric:
 ```
 PUT /api/v1/metrics/{metricId}
     Request Body:
@@ -62,20 +128,10 @@ PUT /api/v1/metrics/{metricId}
         metricId
         description
         query
-```
+``` -->
 
-### Delete a metric:
+<!-- ### Delete a metric:
 ```
 DELETE /api/v1/metrics/{metricId}
-```
-
-### Execute a query:
-```
-POST /api/v1/metrics/{metricId}
-    Request Body:
-        // Parameters for the query
-    Response:
-        result
-```
-
+``` -->
 
